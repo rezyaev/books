@@ -1,0 +1,32 @@
+{% extends "layout.html" %} 
+
+{% block meta %}
+<title>Books | Register</title>
+<link rel="stylesheet" href="../static/login.css" />
+{% endblock %} 
+
+{% block body %}
+<body class="text-center">
+  <form class="login-form" action="{{ url_for('registration') }}" method="post">
+    <h1 class="mb-5 ">BOOKS</h1>
+    <h2 class="h3 mb-4 font-weight-normal">Please register</h1>
+    <p class="text-danger">{{ error_message }}</p>
+    <input
+      id="username"
+      name="user_name"
+      type="text"
+      class="form-control form-control-lg"
+      placeholder="Username"
+    />
+    <input
+      type="password"
+      name="user_pwd"
+      id="password"
+      class="form-control form-control-lg mb-4"
+      placeholder="Password"
+    />
+    <p><a href="{{ url_for('index') }}" class="mb-3">Already have account? Log in here -></a></p>
+    <button class="btn btn-primary btn-lg btn-block" type="submit">Register</button>
+  </form>
+</body>
+{% endblock %}
