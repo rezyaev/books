@@ -1,3 +1,7 @@
+html, body {
+  height: 100%;
+}
+
 body {
   background-color: #f5f5f5;
 }
@@ -8,4 +12,8 @@ body {
 
 .nav-link {
   display: inline-block;
+}
+
+#welcome-text {
+  margin-top: 10%;
 }
