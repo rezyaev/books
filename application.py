@@ -41,3 +41,7 @@ def registration():
             return render_template("login.html", message="Registration successful")
     else:
         return render_template("register.html")
+
+@app.route("/welcome")
+def welcome():
+    return render_template("welcome.html", user_name="Admin")
