@@ -63,12 +63,17 @@ def registration():
             return render_template("login.html", message="Registration successful")
 
 
-@app.route("/welcome")
+@app.route("/welcome", methods=["GET", "POST"])
 def welcome():
     user = db.execute("SELECT * FROM users WHERE id = :id",
                       {"id": session["user_id"]}).fetchone()
     if user is None:
         return redirect("index")
+    elif request.method == "POST":
+        text = request.form.get("text")
+        results = db.execute(
+            "SELECT * FROM books WHERE title LIKE :text OR author LIKE :text OR year LIKE :text OR isbn LIKE :text LIMIT 10", {"text": f"%{text}%"}).fetchall()
+        return render_template("welcome.html", user_name=user.name, results=results, input_value=text)
     else:
         return render_template("welcome.html", user_name=user.name)
 
