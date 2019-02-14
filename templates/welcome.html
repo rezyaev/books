@@ -9,11 +9,37 @@
 <body>
   <nav class="navbar bg-white">
     <h2 class="navbar-brand my-2 ml-3">BOOKS</h1>
-    <div>
-      <span class="navbar-text">{{ user_name }}</span>
-      <a class="nav-link" href="{{ url_for('logout') }}">Log out</a>
-    </div>
+      <div>
+        <span class="navbar-text">{{ user_name }}</span>
+        <a class="nav-link" href="{{ url_for('logout') }}">Log out</a>
+      </div>
   </nav>
-  <h3 class="text-center" id="welcome-text">Welcome!</h3>
+  <div class="container mt-5">
+    <h1 class="text-center">Welcome!</h1>
+    <h3 class="text-center h2 text-muted">We have more than 5000 books to search</h3>
+    <form class="form-inline mx-auto mt-4 mx-w" action="{{ url_for('welcome') }}" method="POST">
+      <input class="form-control form-control-lg" type="text" name="text"
+        placeholder="Enter book's name, author or ISBN number" value="{{ input_value }}">
+      <button class="btn btn-outline-primary btn-lg">Search</button>
+    </form>
+    
+    {% if results %}
+    <h2 class="text-center my-3">Results:</h2>
+    <ul class="list-group mx-w mx-auto">
+
+        {% for result in results %}
+        <li class="list-group-item">
+          <a href="#">
+            {{ result.title }}, {{ result.author }}, {{ result.year }}, {{ result.isbn }}
+          </a>
+        </li>
+        {% endfor %}
+
+    </ul>
+    {% else %}
+      <h4 class="alert alert-danger my-3 w-40 text-center mx-auto">No matches found</h4>
+    {% endif %}
+
+  </div>
 </body>
 {% endblock %}

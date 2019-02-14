@@ -14,6 +14,37 @@ body {
   display: inline-block;
 }
 
-#welcome-text {
-  margin-top: 10%;
+.form-inline {
+  width: 100%;
+}
+
+.form-inline input {
+  width: 80% !important; 
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.form-inline button {
+  margin-left: -1px;
+  width: 20%;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.w-40 {
+  width: 40%;
+}
+
+.mx-w {
+  max-width: 900px;
+}
+
+@media (max-width: 576px) {
+  .form-inline input {
+    width: 70% !important;
+  }
+
+  .form-inline button {
+    width: 30%;
+  }
 }
