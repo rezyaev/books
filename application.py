@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, session, render_template, request
+from flask import Flask, session, render_template, request, redirect, url_for
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -23,15 +23,36 @@ db = scoped_session(sessionmaker(bind=engine))
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-    return render_template("login.html")
+    if request.method == "GET":
+        # Check if user already logged in
+        if session["user_id"] is None:
+            return render_template("login.html")
+        else:
+            return redirect(url_for("welcome"))
+
+    if request.method == "POST":
+        # Try to login user
+        name = request.form.get("user_name")
+        pwd = request.form.get("user_pwd")
+        user = db.execute("SELECT * FROM users WHERE name = :name AND password = :password", {"name": name, "password": pwd}).fetchone()
+
+        if user is None:
+            return render_template("login.html", error_message="Invalid username or password")
+        else:
+            session["user_id"] = user.id
+            return redirect(url_for("welcome"))
 
 
 @app.route("/registration", methods=["GET", "POST"])
 def registration():
-    if request.method == "POST":
+    if request.method == "GET":
+        return render_template("register.html")
+
+    elif request.method == "POST":
         # Try to register user
         name = request.form.get("user_name")
         pwd = request.form.get("user_pwd")
+
         if db.execute("SELECT * FROM users WHERE name = :name", {"name": name}).rowcount == 1:
             return render_template("register.html", error_message="Username is already exists")
         else:
@@ -39,9 +60,18 @@ def registration():
                        "name": name, "pwd": pwd})
             db.commit()
             return render_template("login.html", message="Registration successful")
-    else:
-        return render_template("register.html")
+
 
 @app.route("/welcome")
 def welcome():
-    return render_template("welcome.html", user_name="Admin")
+    user = db.execute("SELECT * FROM users WHERE id = :id", {"id": session["user_id"]}).fetchone()
+    if user is None:
+        return redirect("index")
+    else:
+        return render_template("welcome.html", user_name=user.name)
+
+
+@app.route("/logout")
+def logout():
+    session["user_id"] = None
+    return redirect(url_for("index"))
