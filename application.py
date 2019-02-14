@@ -34,7 +34,8 @@ def index():
         # Try to login user
         name = request.form.get("user_name")
         pwd = request.form.get("user_pwd")
-        user = db.execute("SELECT * FROM users WHERE name = :name AND password = :password", {"name": name, "password": pwd}).fetchone()
+        user = db.execute("SELECT * FROM users WHERE name = :name AND password = :password",
+                          {"name": name, "password": pwd}).fetchone()
 
         if user is None:
             return render_template("login.html", error_message="Invalid username or password")
@@ -64,7 +65,8 @@ def registration():
 
 @app.route("/welcome")
 def welcome():
-    user = db.execute("SELECT * FROM users WHERE id = :id", {"id": session["user_id"]}).fetchone()
+    user = db.execute("SELECT * FROM users WHERE id = :id",
+                      {"id": session["user_id"]}).fetchone()
     if user is None:
         return redirect("index")
     else:
