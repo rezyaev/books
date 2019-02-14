@@ -10,6 +10,7 @@
   <form class="login-form" action="{{ url_for('index') }}" method="post">
     <h1 class="mb-5 ">BOOKS</h1>
     <h2 class="h3 mb-4 font-weight-normal">Please log in</h1>
+    <p class="text-danger">{{ error_message }}</p>
     <p class="text-success">{{ message }}</p>
     <input
       id="username"
