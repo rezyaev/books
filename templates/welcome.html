@@ -36,8 +36,8 @@
         {% endfor %}
 
     </ul>
-    {% else %}
-      <h4 class="alert alert-danger my-3 w-40 text-center mx-auto">No matches found</h4>
+    {% elif alert_message %}
+      <h4 class="alert alert-danger my-3 w-40 text-center mx-auto">{{ alert_message }}</h4>
     {% endif %}
 
   </div>
