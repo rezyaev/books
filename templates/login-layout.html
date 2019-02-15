@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+      integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+      crossorigin="anonymous"
+    />
+    <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="../static/login.css" />
+    {% block meta %} {% endblock %}
+  </head>
+  <body class="text-center">
+    <form
+      class="login-form"
+      action="{% block function %} {% endblock %}"
+      method="post"
+    >
+      <h1 class="mb-5 ">BOOKS</h1>
+      <h2 class="h3 mb-4 font-weight-normal">{% block action_text %}{% endblock %}</h2>
+      <p class="text-danger">{{ error_message }}</p>
+      {% block success_p %}{% endblock %}
+      <input
+        name="user_name"
+        type="text"
+        class="form-control form-control-lg"
+        placeholder="Username"
+      />
+      <input
+        type="password"
+        name="user_pwd"
+        class="form-control form-control-lg mb-4"
+        placeholder="Password"
+      />
+      {% block link %}{% endblock %}
+      <button class="btn btn-primary btn-lg btn-block" type="submit">
+        {% block button_text %}{% endblock %}
+      </button>
+    </form>
+  </body>
+</html>
