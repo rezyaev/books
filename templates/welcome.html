@@ -8,7 +8,7 @@
   <div class="container mt-5">
     <h1 class="text-center">Welcome!</h1>
     <h3 class="text-center h2 text-muted">We have more than 5000 books to search</h3>
-    <form class="form-inline mx-auto mt-4 mx-w" action="{{ url_for('welcome') }}" method="POST">
+    <form class="form-inline mx-auto mt-4 mx-w-900" action="{{ url_for('welcome') }}" method="POST">
       <input class="form-control form-control-lg" type="text" name="text"
         placeholder="Enter book's name, author or ISBN number" value="{{ input_value }}">
       <button class="btn btn-outline-primary btn-lg">Search</button>
@@ -16,7 +16,7 @@
     
     {% if results %}
     <h2 class="text-center my-3">Results:</h2>
-    <ul class="list-group mx-w mx-auto">
+    <ul class="list-group mx-w-900 mx-auto">
 
         {% for result in results %}
         <li class="list-group-item">

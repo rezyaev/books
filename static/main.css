@@ -35,8 +35,16 @@ body {
   width: 40%;
 }
 
-.mx-w {
+.mx-w-900 {
   max-width: 900px;
+}
+
+.mx-w-500 {
+  max-width: 500px;
+}
+
+.font-size-20 {
+  font-size: 20px
 }
 
 @media (max-width: 576px) {

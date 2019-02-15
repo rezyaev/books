@@ -1,0 +1,31 @@
+{% extends "main-layout.html" %} 
+
+{% block meta %}
+<title>Books | {{ book.title }}</title>
+{% endblock %} 
+
+{% block body %}
+<div class="container mt-5">
+  <h1 class="text-center mb-5">Book info:</h1>
+  <ul class="list-group mx-w-500 mx-auto font-size-20">
+    <li class="list-group-item p-3">
+      Book's title: <strong>{{ book.title }}</strong>
+    </li>
+    <li class="list-group-item p-3">
+      Book's author: <strong>{{ book.author }}</strong>
+    </li>
+    <li class="list-group-item p-3">
+      Book's publication year: <strong>{{ book.year }}</strong>
+    </li>
+    <li class="list-group-item p-3">
+      Book's ISBN: <strong>{{ book.isbn }}</strong>
+    </li>
+  </ul>
+  <h2 class="text-center my-5">Book reviews:</h2>
+  {% if reviews %}
+
+  {% else %}
+  <h3 class="alert alert-danger text-center mx-w-500 mx-auto">No reviews yet</h3>
+  {% endif %}
+</div>
+{% endblock %}
