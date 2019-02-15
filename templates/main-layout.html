@@ -15,8 +15,8 @@
     {% block meta %} {% endblock %}
   </head>
   <body>
-    <nav class="navbar bg-white">
-      <h2 class="navbar-brand my-2 ml-3">BOOKS</h2>
+    <nav class="navbar bg-white navbar-light">
+      <a class="navbar-brand my-2 ml-3 font-weight-bold" href="{{ url_for('welcome') }}">BOOKS</a>
       <div>
         <span class="navbar-text">{{ user_name }}</span>
         <a class="nav-link" href="{{ url_for('logout') }}">Log out</a>
