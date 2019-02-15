@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+      integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+      crossorigin="anonymous"
+    />
+    <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="../static/main.css" />
+    {% block meta %} {% endblock %}
+  </head>
+  <body>
+    <nav class="navbar bg-white">
+      <h2 class="navbar-brand my-2 ml-3">BOOKS</h2>
+      <div>
+        <span class="navbar-text">{{ user_name }}</span>
+        <a class="nav-link" href="{{ url_for('logout') }}">Log out</a>
+      </div>
+    </nav>
+    {% block body %} {% endblock %}
+  </body>
+</html>

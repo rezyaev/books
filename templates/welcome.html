@@ -1,19 +1,10 @@
-{% extends "layout.html" %} 
+{% extends "main-layout.html" %} 
 
 {% block meta %}
 <title>Books | Welcome</title>
-<link rel="stylesheet" href="../static/welcome.css">
 {% endblock %} 
 
 {% block body %}
-<body>
-  <nav class="navbar bg-white">
-    <h2 class="navbar-brand my-2 ml-3">BOOKS</h1>
-      <div>
-        <span class="navbar-text">{{ user_name }}</span>
-        <a class="nav-link" href="{{ url_for('logout') }}">Log out</a>
-      </div>
-  </nav>
   <div class="container mt-5">
     <h1 class="text-center">Welcome!</h1>
     <h3 class="text-center h2 text-muted">We have more than 5000 books to search</h3>
@@ -29,7 +20,7 @@
 
         {% for result in results %}
         <li class="list-group-item">
-          <a href="#">
+          <a href="{{ url_for('book', isbn=result.isbn) }}">
             {{ result.title }}, {{ result.author }}, {{ result.year }}, {{ result.isbn }}
           </a>
         </li>
@@ -41,5 +32,4 @@
     {% endif %}
 
   </div>
-</body>
 {% endblock %}
