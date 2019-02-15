@@ -25,7 +25,7 @@ db = scoped_session(sessionmaker(bind=engine))
 def index():
     if request.method == "GET":
         # Check if user already logged in
-        if session.get("user_id") is None:
+        if session.get("user_name") is None:
             return render_template("login.html")
         else:
             return redirect(url_for("welcome"))
@@ -40,7 +40,7 @@ def index():
         if user is None:
             return render_template("login.html", error_message="Invalid username or password")
         else:
-            session["user_id"] = user.id
+            session["user_name"] = user.name
             return redirect(url_for("welcome"))
 
 
@@ -65,30 +65,46 @@ def registration():
 
 @app.route("/welcome", methods=["GET", "POST"])
 def welcome():
-    user = db.execute("SELECT * FROM users WHERE id = :id",
-                      {"id": session["user_id"]}).fetchone()
-    if user is None:
+    if session.get("user_name") is None:
         return redirect("index")
     elif request.method == "POST":
+        # Search the books
         text = request.form.get("text")
         results = db.execute(
             "SELECT * FROM books WHERE title LIKE :text OR author LIKE :text OR year LIKE :text OR isbn LIKE :text LIMIT 10", {"text": f"%{text}%"}).fetchall()
-        return render_template("welcome.html", user_name=user.name, results=results, input_value=text, alert_message="No matches found")
+        return render_template("welcome.html", user_name=session["user_name"], results=results, input_value=text, alert_message="No matches found")
     else:
-        return render_template("welcome.html", user_name=user.name)
+        return render_template("welcome.html", user_name=session["user_name"])
 
 
 @app.route("/logout")
 def logout():
-    session["user_id"] = None
+    session["user_name"] = None
     return redirect(url_for("index"))
 
 
-@app.route("/books/<string:isbn>")
+@app.route("/books/<string:isbn>", methods=["GET", "POST"])
 def book(isbn):
-    user = db.execute("SELECT * FROM users WHERE id = :id",
-                      {"id": session["user_id"]}).fetchone()
-    if user is None: return redirect("index")
+    reviews = db.execute("SELECT * FROM reviews WHERE isbn = :isbn", {"isbn": isbn}).fetchall()
+    book_info = db.execute(
+            "SELECT * FROM books WHERE isbn = :isbn", {"isbn": isbn}).fetchone()
+    if request.method == "GET":
+        # Show the page
+        if session.get("user_name") is None:
+            return redirect("index")
+        else:
+            return render_template("book.html", book=book_info, user_name=session["user_name"], reviews=reviews)
 
-    book_info = db.execute("SELECT * FROM books WHERE isbn = :isbn", {"isbn":isbn}).fetchone()
-    return render_template("book.html", book=book_info, user_name=user.name)
+    elif request.method == "POST":
+        # Add a review
+        # Check if user already did a review for this book
+        if db.execute("SELECT * FROM reviews WHERE username = :username AND isbn = :isbn", {"username": session["user_name"], "isbn": isbn}).rowcount > 0:
+            return render_template("book.html", book=book_info, user_name=session["user_name"], alert_message="You've already done review", reviews=reviews)
+        else:
+            rating = request.form.get("rating")
+            text = request.form.get("text")
+            db.execute("INSERT INTO reviews(rating, text, isbn, username) VALUES (:rating, :text, :isbn, :username)", {
+                       "rating": rating, "text": text, "isbn": isbn, "username": session["user_name"]})
+            db.commit()
+            reviews = db.execute("SELECT * FROM reviews WHERE isbn = :isbn", {"isbn": isbn}).fetchall()
+            return render_template("book.html", book=book_info, user_name=session["user_name"], reviews=reviews)

@@ -21,11 +21,44 @@
       Book's ISBN: <strong>{{ book.isbn }}</strong>
     </li>
   </ul>
-  <h2 class="text-center my-5">Book reviews:</h2>
+  <h2 class="text-center my-3 mt-5">Book reviews:</h2>
+  <h5 class="my-2 text-center">Add a review:</h5>
+  {% if alert_message %}
+  <h5 class="alert alert-danger text-center mx-w-500 mx-auto">{{ alert_message }}</h5>
+  {% endif %}
+  <form action="{{ url_for('book', isbn=book.isbn) }}" method="post"
+    class="mx-w-500 mx-auto bg-white border rounded p-4 my-3">
+    <div class="form-group row">
+      <label for="rating" class="col-form-label col-sm-3 font-size-20">Rating</label>
+      <select name="rating" id="rating" class="form-control col-sm-1">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+      </select>
+    </div>
+    <div class="form-group row">
+      <label for="text" class="col-form-label col-sm-3 font-size-20">Text</label>
+      <textarea name="text" id="text" rows="5" class="form-control col-sm-8" placeholder="Great book!"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary mx-auto d-block">Add</button>
+  </form>
   {% if reviews %}
-
+  <ul class="m-0 p-0">
+    {% for review in reviews %}
+    <div class="card mx-w-500 mx-auto mb-3">
+      <div class="card-header font-size-20">{{ review.username }}</div>
+      <div class="card-body mb-1 mt-1">
+        <h5 class="card-subtitle mb-3" style="font-size: 25px;">Rating: {{ review.rating }}</h5>
+        <p class="card-text font-size-20">{{ review.text }}</p>
+      </div>
+    </div>
+    {% endfor %}
+  </ul>
   {% else %}
   <h3 class="alert alert-danger text-center mx-w-500 mx-auto">No reviews yet</h3>
   {% endif %}
+  <div class="spacing" style="height: 300px"></div>
 </div>
 {% endblock %}
