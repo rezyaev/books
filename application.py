@@ -25,7 +25,7 @@ db = scoped_session(sessionmaker(bind=engine))
 def index():
     if request.method == "GET":
         # Check if user already logged in
-        if session["user_id"] is None:
+        if session.get("user_id") is None:
             return render_template("login.html")
         else:
             return redirect(url_for("welcome"))
@@ -73,7 +73,7 @@ def welcome():
         text = request.form.get("text")
         results = db.execute(
             "SELECT * FROM books WHERE title LIKE :text OR author LIKE :text OR year LIKE :text OR isbn LIKE :text LIMIT 10", {"text": f"%{text}%"}).fetchall()
-        return render_template("welcome.html", user_name=user.name, results=results, input_value=text)
+        return render_template("welcome.html", user_name=user.name, results=results, input_value=text, alert_message="No matches found")
     else:
         return render_template("welcome.html", user_name=user.name)
 
