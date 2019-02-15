@@ -82,3 +82,13 @@ def welcome():
 def logout():
     session["user_id"] = None
     return redirect(url_for("index"))
+
+
+@app.route("/books/<string:isbn>")
+def book(isbn):
+    user = db.execute("SELECT * FROM users WHERE id = :id",
+                      {"id": session["user_id"]}).fetchone()
+    if user is None: return redirect("index")
+
+    book_info = db.execute("SELECT * FROM books WHERE isbn = :isbn", {"isbn":isbn}).fetchone()
+    return render_template("book.html", book=book_info, user_name=user.name)
