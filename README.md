@@ -27,7 +27,7 @@ return res.json()
 
 This code will return:
 
-~~~JSON
+~~~json
 {
   'title': 'The Dark Is Rising',
   'author': 'Susan Cooper',
