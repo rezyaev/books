@@ -1,7 +1,8 @@
 import os
 import requests
+import json
 
-from flask import Flask, session, render_template, request, redirect, url_for
+from flask import Flask, session, render_template, request, redirect, url_for, abort
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -116,3 +117,26 @@ def book(isbn):
                 "SELECT * FROM reviews WHERE isbn = :isbn", {"isbn": isbn}).fetchall()
 
             return render_template("book.html", book=book_info, user_name=session["user_name"], reviews=reviews, res=res)
+
+
+@app.route('/api/<string:isbn>')
+def api(isbn):
+    book_info = db.execute(
+        "SELECT * FROM books WHERE isbn = :isbn", {"isbn": isbn}).fetchone()
+    if book_info is None:
+        return abort(404)
+    else:
+        res = requests.get("https://www.goodreads.com/book/review_counts.json",
+                           params={"key": "hmmbg2GLH2bzdmJ49tzFDA", "isbns": isbn}).json()
+        res = res["books"][0]
+        review_count = res["work_ratings_count"]
+        avg_score = res["average_rating"]
+        result = {
+            "title": book_info.title,
+            "author": book_info.author,
+            "year": book_info.year,
+            "isbn": book_info.isbn,
+            "review_count": review_count,
+            "average_score": avg_score
+        }
+        return json.dumps(result)
