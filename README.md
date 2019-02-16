@@ -12,7 +12,7 @@ import.py is used to import all information from book.csv to online database.
 
 templates/ and static/ contain all HTML and CSS part of the web app.
 
-All database commands were written with SQLalchemy module for python and raw SQL command.
+All database commands were written with SQLalchemy module for python and raw SQL commands.
 
 ## How to use Book's API
 
