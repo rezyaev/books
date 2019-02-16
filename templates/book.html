@@ -9,17 +9,25 @@
   <h1 class="text-center mb-5">Book info:</h1>
   <ul class="list-group mx-w-500 mx-auto font-size-20">
     <li class="list-group-item p-3">
-      Book's title: <strong>{{ book.title }}</strong>
+      Title: <strong>{{ book.title }}</strong>
     </li>
     <li class="list-group-item p-3">
-      Book's author: <strong>{{ book.author }}</strong>
+      Author: <strong>{{ book.author }}</strong>
     </li>
     <li class="list-group-item p-3">
-      Book's publication year: <strong>{{ book.year }}</strong>
+      Publication year: <strong>{{ book.year }}</strong>
     </li>
     <li class="list-group-item p-3">
-      Book's ISBN: <strong>{{ book.isbn }}</strong>
+      ISBN: <strong>{{ book.isbn }}</strong>
     </li>
+    {% if res %}
+    <li class="list-group-item p-3">
+      Average rating on Goodreads: <strong>{{ res["average_rating"] }}</strong>
+    </li>
+    <li class="list-group-item p-3">
+      Number of ratings given on Goodreads: <strong>{{ res["work_ratings_count"] }}</strong>
+    </li>
+    {% endif %}
   </ul>
   <h2 class="text-center my-3 mt-5">Book reviews:</h2>
   <h5 class="my-2 text-center">Add a review:</h5>
