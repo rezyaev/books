@@ -1,4 +1,5 @@
 import os
+import requests
 
 from flask import Flask, session, render_template, request, redirect, url_for
 from flask_session import Session
@@ -85,26 +86,33 @@ def logout():
 
 @app.route("/books/<string:isbn>", methods=["GET", "POST"])
 def book(isbn):
-    reviews = db.execute("SELECT * FROM reviews WHERE isbn = :isbn", {"isbn": isbn}).fetchall()
+    reviews = db.execute(
+        "SELECT * FROM reviews WHERE isbn = :isbn", {"isbn": isbn}).fetchall()
     book_info = db.execute(
-            "SELECT * FROM books WHERE isbn = :isbn", {"isbn": isbn}).fetchone()
+        "SELECT * FROM books WHERE isbn = :isbn", {"isbn": isbn}).fetchone()
+    res = requests.get("https://www.goodreads.com/book/review_counts.json",
+                       params={"key": "hmmbg2GLH2bzdmJ49tzFDA", "isbns": isbn}).json()
+    res = res["books"][0]
+
     if request.method == "GET":
         # Show the page
         if session.get("user_name") is None:
             return redirect("index")
         else:
-            return render_template("book.html", book=book_info, user_name=session["user_name"], reviews=reviews)
+            return render_template("book.html", book=book_info, user_name=session["user_name"], reviews=reviews, res=res)
 
     elif request.method == "POST":
         # Add a review
         # Check if user already did a review for this book
         if db.execute("SELECT * FROM reviews WHERE username = :username AND isbn = :isbn", {"username": session["user_name"], "isbn": isbn}).rowcount > 0:
-            return render_template("book.html", book=book_info, user_name=session["user_name"], alert_message="You've already done review", reviews=reviews)
+            return render_template("book.html", book=book_info, user_name=session["user_name"], alert_message="You've already done review", reviews=reviews, res=res)
         else:
             rating = request.form.get("rating")
             text = request.form.get("text")
             db.execute("INSERT INTO reviews(rating, text, isbn, username) VALUES (:rating, :text, :isbn, :username)", {
                        "rating": rating, "text": text, "isbn": isbn, "username": session["user_name"]})
             db.commit()
-            reviews = db.execute("SELECT * FROM reviews WHERE isbn = :isbn", {"isbn": isbn}).fetchall()
-            return render_template("book.html", book=book_info, user_name=session["user_name"], reviews=reviews)
+            reviews = db.execute(
+                "SELECT * FROM reviews WHERE isbn = :isbn", {"isbn": isbn}).fetchall()
+
+            return render_template("book.html", book=book_info, user_name=session["user_name"], reviews=reviews, res=res)
