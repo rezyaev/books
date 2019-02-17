@@ -25,7 +25,7 @@ res = requests.get("https://rezyayev-cs50w-project1.herokuapp.com/api/1416949658
 return res.json()
 ~~~
 
-This code will return:
+This code will return JSON:
 
 ~~~
 {
